@@ -71,9 +71,17 @@ public class JwtService {
 
             // Returns the extracted email
             return email;
-        }catch (JwtException e){
-            //Exception for invalid token
-            throw new InvalidTokenException(e.getMessage());
+        } catch (ExpiredJwtException e) {
+            // This exception is more specific for expired tokens
+            throw new InvalidTokenException("Token has expired: " + e.getMessage());
+        } catch (UnsupportedJwtException e) {
+            throw new InvalidTokenException("Token format is not supported: " + e.getMessage());
+        } catch (MalformedJwtException e) {
+            throw new InvalidTokenException("Token is malformed: " + e.getMessage());
+        } catch (SignatureException e) {
+            throw new InvalidTokenException("Token signature is invalid: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new InvalidTokenException("Invalid token argument: " + e.getMessage());
         }
     }
 

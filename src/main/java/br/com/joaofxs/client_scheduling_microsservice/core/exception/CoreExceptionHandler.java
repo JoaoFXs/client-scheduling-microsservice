@@ -1,6 +1,7 @@
 package br.com.joaofxs.client_scheduling_microsservice.core.exception;
 
 import br.com.joaofxs.client_scheduling_microsservice.core.dto.exception.ResponseException;
+import io.jsonwebtoken.JwtException;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,15 @@ public class CoreExceptionHandler {
 
     @ExceptionHandler({UserAlreadyExistException.class})
         public ResponseEntity<?> handleUserAlreadyExists(UserAlreadyExistException ex){
+        ResponseException response = new ResponseException(HttpStatus.CONFLICT.name(),HttpStatus.CONFLICT.value(),ex.getMessage());
+        return new ResponseEntity<>(
+                response,
+                HttpStatus.CONFLICT
+        );
+    }
+
+    @ExceptionHandler({InvalidTokenException.class, JwtException.class})
+    public ResponseEntity<?> handleInvalidTokenException(RuntimeException ex){
         ResponseException response = new ResponseException(HttpStatus.CONFLICT.name(),HttpStatus.CONFLICT.value(),ex.getMessage());
         return new ResponseEntity<>(
                 response,

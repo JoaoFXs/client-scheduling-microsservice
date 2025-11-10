@@ -40,10 +40,4 @@ public class SecurityConfiguration {
         return http.build();
     }
 
-//    @Bean
-//    public SecurityFilterChain swaggerFilterChain(HttpSecurity http) throws Exception {
-//        // Configuração para endpoints públicos (Swagger, etc.) que não precisam de segurança
-//        http.securityMatcher("/swagger-ui/**", "/v3/api-docs/**").authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
-//        return http.build();
-//    }
 }

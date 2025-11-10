@@ -1,6 +1,8 @@
 package br.com.joaofxs.client_scheduling_microsservice.core.config;
 
+import br.com.joaofxs.client_scheduling_microsservice.core.controller.AuthenticationController;
 import br.com.joaofxs.client_scheduling_microsservice.core.repository.UserRepository;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 
 @Configuration
 public class ApplicationConfig {

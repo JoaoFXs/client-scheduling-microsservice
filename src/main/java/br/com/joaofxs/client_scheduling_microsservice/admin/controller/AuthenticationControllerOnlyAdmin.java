@@ -1,7 +1,7 @@
 package br.com.joaofxs.client_scheduling_microsservice.admin.controller;
 
 import br.com.joaofxs.client_scheduling_microsservice.core.dto.AccessToken;
-import br.com.joaofxs.client_scheduling_microsservice.core.model.User;
+import br.com.joaofxs.client_scheduling_microsservice.core.dto.UserDTO;
 import br.com.joaofxs.client_scheduling_microsservice.core.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ public class AuthenticationControllerOnlyAdmin {
     private AuthenticationService service;
 
     @PostMapping("/auth/register")
-    public ResponseEntity<AccessToken> registerAdmin(@RequestBody User request) {
+    public ResponseEntity<AccessToken> registerAdmin(@RequestBody UserDTO request) {
         return new ResponseEntity<>(service.register(request, "admin"), HttpStatus.CREATED);
     }
 }

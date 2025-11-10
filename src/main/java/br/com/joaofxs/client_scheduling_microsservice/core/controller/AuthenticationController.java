@@ -4,8 +4,7 @@ package br.com.joaofxs.client_scheduling_microsservice.core.controller;
 import br.com.joaofxs.client_scheduling_microsservice.core.dto.AccessToken;
 import br.com.joaofxs.client_scheduling_microsservice.core.dto.AuthRequest;
 
-import br.com.joaofxs.client_scheduling_microsservice.core.model.User;
-
+import br.com.joaofxs.client_scheduling_microsservice.core.dto.UserDTO;
 import br.com.joaofxs.client_scheduling_microsservice.core.service.AuthenticationService;
 
 import org.springframework.http.HttpStatus;
@@ -26,13 +25,13 @@ public class AuthenticationController {
         this.service = service;
     }
 
-    @PostMapping("/auth/register")
-    public ResponseEntity<AccessToken> register(@RequestBody User request) {
+    @PostMapping("/register")
+    public ResponseEntity<AccessToken> register(@RequestBody UserDTO request) {
         return new ResponseEntity<>(service.register(request, "user"), HttpStatus.CREATED);
     }
 
 
-    @PostMapping("/auth/login")
+    @PostMapping("/login")
     public ResponseEntity<AccessToken> login(@RequestBody AuthRequest request) {
         return ResponseEntity.ok(service.authenticate(request));
     }

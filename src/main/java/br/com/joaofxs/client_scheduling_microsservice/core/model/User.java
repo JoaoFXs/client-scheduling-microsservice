@@ -3,6 +3,7 @@ package br.com.joaofxs.client_scheduling_microsservice.core.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "usuario")
 @Data
+@NoArgsConstructor
 public class User implements UserDetails {
 
 

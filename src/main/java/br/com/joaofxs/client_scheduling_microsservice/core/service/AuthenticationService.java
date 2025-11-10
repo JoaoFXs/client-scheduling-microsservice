@@ -1,6 +1,7 @@
 package br.com.joaofxs.client_scheduling_microsservice.core.service;
 
 import br.com.joaofxs.client_scheduling_microsservice.core.dto.AccessToken;
+import br.com.joaofxs.client_scheduling_microsservice.core.dto.UserDTO;
 import br.com.joaofxs.client_scheduling_microsservice.core.exception.UserAlreadyExistException;
 import br.com.joaofxs.client_scheduling_microsservice.core.model.User;
 import br.com.joaofxs.client_scheduling_microsservice.core.dto.AuthRequest;
@@ -21,10 +22,12 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final UserRepository userRepository;
 
-    public AccessToken register(User user, String role) {
+    public AccessToken register(UserDTO userDTO, String role) {
+        User user = new User();
+
         // Verifica se o usuário já existe
-        if(userRepository.getByEmail(user.getEmail()) != null){
-            throw new UserAlreadyExistException(user.getEmail() + " já cadastrado");
+        if(userRepository.getByEmail(userDTO.email()) != null){
+            throw new UserAlreadyExistException(userDTO.email() + " já cadastrado");
         }
 
         if (role.contains("user")) {
@@ -34,7 +37,7 @@ public class AuthenticationService {
         }
 
         // Criptografa a senha antes de salvar
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(userDTO.password()));
         repository.save(user);
         return jwtService.generateToken(user);
     }

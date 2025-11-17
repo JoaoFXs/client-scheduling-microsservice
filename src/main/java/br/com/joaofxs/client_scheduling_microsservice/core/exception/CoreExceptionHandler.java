@@ -16,7 +16,7 @@ public class CoreExceptionHandler {
 
 
     @ExceptionHandler({UsernameNotFoundException.class})
-    public ResponseEntity<?> handleUserNotFoundException(RuntimeException ex){
+    public ResponseEntity<ResponseException> handleUserNotFoundException(RuntimeException ex){
         ResponseException response = new ResponseException(HttpStatus.NOT_FOUND.name(),HttpStatus.NOT_FOUND.value(),ex.getMessage());
         return new ResponseEntity<>(
                 response,

@@ -2,6 +2,7 @@ package br.com.joaofxs.client_scheduling_microsservice.core.controller.dto;
 
 import br.com.joaofxs.client_scheduling_microsservice.core.dto.AccessToken;
 import br.com.joaofxs.client_scheduling_microsservice.core.dto.AuthRequest;
+import br.com.joaofxs.client_scheduling_microsservice.core.dto.AuthResponse;
 import br.com.joaofxs.client_scheduling_microsservice.core.dto.UserDTO;
 import br.com.joaofxs.client_scheduling_microsservice.core.dto.exception.ResponseException;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +41,7 @@ public class DTOTests {
     @Test
     @DisplayName("DTO 4 - AuthResponse")
     public void authResponseTest(){
-        EqualsVerifier.forClass(AuthRequest.class).verify();
+        EqualsVerifier.forClass(AuthResponse.class).verify();
     }
 
     @Test

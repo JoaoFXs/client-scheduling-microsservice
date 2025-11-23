@@ -26,6 +26,7 @@ public class SecurityConfiguration {
         // Configuração para os endpoints da API que exigem segurança
         http
                 .csrf(csrf -> csrf.disable()) // Desabilita CSRF, comum em APIs stateless
+                .cors(cors -> cors.configure(http))
                 .securityMatcher("/api/**") // Aplica esta cadeia de filtros APENAS para caminhos que começam com /api/
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll() // Endpoints de autenticação são públicos

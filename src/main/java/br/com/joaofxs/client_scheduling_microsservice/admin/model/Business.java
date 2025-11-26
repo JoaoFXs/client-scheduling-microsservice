@@ -5,8 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.ArrayList;
@@ -14,8 +13,11 @@ import java.util.List;
 
 @Entity
 @Table(name = "business_table")
+@Getter
+@Setter
+@NoArgsConstructor
 @Builder
-@Data
+@AllArgsConstructor
 public class Business {
 
     @Id
@@ -50,8 +52,13 @@ public class Business {
 
     // cascade = ALL: Se deletar a empresa, deleta os horários junto
     // orphanRemoval = true: Se tirar um horário da lista, deleta do banco
-    @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OpeningTime> times = new ArrayList<>();
 
+    // Método auxiliar para facilitar adicionar horários
+    public void adicionarHorario(OpeningTime time) {
+        times.add(time);
+        time.setBusiness(this);
+    }
 
 }

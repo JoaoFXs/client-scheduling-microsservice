@@ -2,12 +2,14 @@ package br.com.joaofxs.client_scheduling_microsservice.admin.model;
 
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "business_opening_time")
+@Data
 public class OpeningTime {
 
     @Id

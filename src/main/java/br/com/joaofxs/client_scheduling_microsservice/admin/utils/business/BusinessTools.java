@@ -19,4 +19,8 @@ public class BusinessTools {
                 .build();
 
     }
+
+    public BusinessDTO convertBusinessToDTO(Business business){
+        return new BusinessDTO(business.getName(), business.getDescription(), business.getPhone(), business.getEmail(), business.getWebsite(), business.getAddress(), business.getCep());
+    }
 }

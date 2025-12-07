@@ -2,14 +2,18 @@ package br.com.joaofxs.client_scheduling_microsservice.admin.model;
 
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "business_opening_time")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class OpeningTime {
 
     @Id
@@ -20,10 +24,10 @@ public class OpeningTime {
     @Column(name = "day_of_week", nullable = false)
     private DayOfWeek dayOfWeek;
 
-    @Column(name = "opening_hours", nullable = false)
+    @Column(name = "opening_hours", nullable = false, columnDefinition = "TIME")
     private LocalDateTime openingHours;
 
-    @Column(name = "closed_hours", nullable = false)
+    @Column(name = "closed_hours", nullable = false, columnDefinition = "TIME")
     private LocalDateTime closedHours;
 
     @Column

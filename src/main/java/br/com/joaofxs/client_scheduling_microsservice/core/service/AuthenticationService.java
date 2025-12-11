@@ -23,7 +23,12 @@ public class AuthenticationService {
     private final UserRepository userRepository;
 
     public AccessToken register(UserDTO userDTO, String role) {
-        User user = new User();
+        User user = User.builder()
+                    .username(userDTO.username())
+                    .email(userDTO.email())
+                    .phone(userDTO.phone())
+                    .cpf(userDTO.cpf())
+                    .build();
 
         // Verifica se o usuário já existe
         if(userRepository.getByEmail(userDTO.email()) != null){
@@ -38,6 +43,7 @@ public class AuthenticationService {
 
         // Criptografa a senha antes de salvar
         user.setPassword(passwordEncoder.encode(userDTO.password()));
+
         repository.save(user);
         return jwtService.generateToken(user);
     }

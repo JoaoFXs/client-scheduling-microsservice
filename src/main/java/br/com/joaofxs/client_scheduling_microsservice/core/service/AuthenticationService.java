@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.apache.commons.text.WordUtils;
 import java.util.Set;
 
 @Service
@@ -24,7 +24,7 @@ public class AuthenticationService {
 
     public AccessToken register(UserDTO userDTO, String role) {
         User user = User.builder()
-                    .username(userDTO.username())
+                    .username(WordUtils.capitalizeFully(userDTO.username()))
                     .email(userDTO.email())
                     .phone(userDTO.phone())
                     .cpf(userDTO.cpf())

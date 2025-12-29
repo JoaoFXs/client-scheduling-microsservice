@@ -32,7 +32,7 @@ public class AuthenticationService {
 
         // Verifica se o usuário já existe
         if(userRepository.getByEmail(userDTO.email()) != null){
-            throw new UserAlreadyExistException(userDTO.email() + " já cadastrado");
+            throw new UserAlreadyExistException("Email já cadastrado");
         }
 
         if (role.contains("user")) {

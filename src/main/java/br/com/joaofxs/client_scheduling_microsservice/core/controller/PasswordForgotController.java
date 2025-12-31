@@ -20,7 +20,7 @@ public class PasswordForgotController {
     @PostMapping
     public ResponseEntity<?> requestReset(@RequestBody RequestResetDTO requestResetDTO){
 
-        //service.processPasswordReset(requestResetDTO.email());
+        service.processPasswordReset(requestResetDTO.email());
 
         return ResponseEntity.ok("If the email is registered, you'll get a reset link");
     }

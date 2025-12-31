@@ -61,9 +61,7 @@ public class AuthenticationServiceTest {
     private AccessToken accessToken;
     @BeforeEach
     void setUp(){
-        userDTO = new UserDTO("testUser",
-                "test@example.com",
-                "testPassword");
+        userDTO = new UserDTO("testUser","test@example.com", "testPassword", "12345678900", "1100000000");
         accessToken = new AccessToken("fake-jwt-token");
         authRequest = new AuthRequest("test@example.com", "testPassword");
     }
@@ -78,7 +76,7 @@ public class AuthenticationServiceTest {
        UserAlreadyExistException exception =
                Assertions.assertThrows(UserAlreadyExistException.class, () ->  authenticationService.register(userDTO, "user"));
 
-       Assertions.assertEquals(userDTO.email() + " já cadastrado", exception.getMessage());
+       Assertions.assertEquals("Email já cadastrado", exception.getMessage());
     }
 
     @Test

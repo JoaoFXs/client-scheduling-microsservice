@@ -1,13 +1,12 @@
 package br.com.joaofxs.client_scheduling_microsservice.core.utils;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;
 import java.util.Base64;
 
 @Component
-public class GenerateToken {
+public class GenerateResetToken {
 
     private static final SecureRandom secureRandom = new SecureRandom();
     private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder().withoutPadding();

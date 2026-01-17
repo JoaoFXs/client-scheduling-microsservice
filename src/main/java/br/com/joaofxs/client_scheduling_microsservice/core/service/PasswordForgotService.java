@@ -1,6 +1,7 @@
 package br.com.joaofxs.client_scheduling_microsservice.core.service;
 
 
+import br.com.joaofxs.client_scheduling_microsservice.core.exception.TokenInvalidException;
 import br.com.joaofxs.client_scheduling_microsservice.core.model.ResetToken;
 import br.com.joaofxs.client_scheduling_microsservice.core.model.User;
 import br.com.joaofxs.client_scheduling_microsservice.core.repository.ResetTokenRepository;
@@ -38,12 +39,21 @@ public class PasswordForgotService {
         ResetToken resetToken = ResetToken.builder()
                 .token(token)
                 .user(user)
-                .expiresAt(LocalDateTime.now())
+                .expiresAt(LocalDateTime.now().plusMinutes(30))
                 .build();
         resetTokenRepositoy.save(resetToken);
 
         notificationComponent.sendEmail(user.getEmail(), token);
 
+
+    }
+
+    public void validateToken(String token) {
+        Optional<ResetToken> tokenReturn =  resetTokenRepositoy.findByToken(token);
+
+        if(tokenReturn.isEmpty() || tokenReturn.get().isExpired()){
+            throw new TokenInvalidException();
+        }
 
     }
 }

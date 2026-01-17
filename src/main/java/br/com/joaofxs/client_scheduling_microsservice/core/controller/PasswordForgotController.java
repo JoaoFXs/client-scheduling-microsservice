@@ -2,16 +2,16 @@ package br.com.joaofxs.client_scheduling_microsservice.core.controller;
 
 
 import br.com.joaofxs.client_scheduling_microsservice.core.dto.RequestResetDTO;
+import br.com.joaofxs.client_scheduling_microsservice.core.model.ResetToken;
 import br.com.joaofxs.client_scheduling_microsservice.core.service.PasswordForgotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
-@RequestMapping("api/forgot-password")
+@RequestMapping("api/reset-password")
 public class PasswordForgotController {
 
     @Autowired
@@ -23,6 +23,12 @@ public class PasswordForgotController {
         service.processPasswordReset(requestResetDTO.email());
 
         return ResponseEntity.ok("If the email is registered, you'll get a reset link");
+    }
+
+    @GetMapping
+    public ResponseEntity<?> validateToken(@RequestParam String token){
+        service.validateToken(token);
+        return ResponseEntity.ok("Token is valid");
     }
 
 }

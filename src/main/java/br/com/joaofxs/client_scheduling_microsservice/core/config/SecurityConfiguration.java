@@ -30,6 +30,7 @@ public class SecurityConfiguration {
                 .securityMatcher("/api/**") // Aplica esta cadeia de filtros APENAS para caminhos que começam com /api/
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll() // Endpoints de autenticação são públicos
+                        .requestMatchers("/api/reset-password/**").permitAll() //Endpoints de recuperação de senha são publicos
                         .requestMatchers("/api/admin/**").hasAuthority("ADMIN") // Apenas ADMIN acessa /api/admin/**
                         .requestMatchers("/api/user/**").hasAnyAuthority("ADMIN", "USER") // ADMIN e USER acessam /api/user/**
                         .anyRequest().authenticated() // Todas as outras requisições exigem autenticação

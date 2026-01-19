@@ -56,7 +56,7 @@ public class AuthenticationControllerOnlyadminTest {
     @BeforeEach
     void setUp(){
         //Assert
-        userDTO = new UserDTO("testUser","test@example.com", "testPassword");
+        userDTO = new UserDTO("testUser","test@example.com", "testPassword", "12345678900", "1100000000");
         authRequest = new AuthRequest(userDTO.email(), userDTO.password());
         accessToken = new AccessToken("fake-jwt-token");
     }

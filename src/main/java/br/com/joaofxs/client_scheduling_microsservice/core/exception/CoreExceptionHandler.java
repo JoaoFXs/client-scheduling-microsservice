@@ -42,4 +42,15 @@ public class CoreExceptionHandler {
         );
     }
 
+    @ExceptionHandler({TokenInvalidException.class})
+    public ResponseEntity<ResponseException> tokenInvalidException(RuntimeException ex){
+        ResponseException response = new ResponseException(
+                HttpStatus.BAD_REQUEST.name(),
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage());
+        return new ResponseEntity<>(
+                response,
+                HttpStatus.BAD_REQUEST);
+
+    }
 }

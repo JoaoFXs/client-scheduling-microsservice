@@ -61,7 +61,7 @@ class AuthenticationControllerTests {
     void setUp(TestInfo testInfo){
         log.info("==============================================");
         log.info("Iniciando Teste: {}", testInfo.getDisplayName());
-        user = new UserDTO("testUser","test@example.com", "testPassword");
+        user = new UserDTO("testUser","test@example.com", "testPassword", "12345678900", "1100000000");
         log.info("- Usuário para teste: {} \n", user);
         authRequest = new AuthRequest(user.email(), user.password());
         accessToken = new AccessToken("fake-jwt-token");

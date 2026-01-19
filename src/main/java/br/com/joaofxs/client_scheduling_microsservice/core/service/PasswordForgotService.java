@@ -9,7 +9,6 @@ import br.com.joaofxs.client_scheduling_microsservice.core.repository.UserReposi
 import br.com.joaofxs.client_scheduling_microsservice.core.utils.GenerateResetToken;
 import br.com.joaofxs.client_scheduling_microsservice.core.utils.NotificationComponent;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +28,7 @@ public class PasswordForgotService {
 
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private NotificationComponent notificationComponent;
+    private final NotificationComponent notificationComponent;
 
     public void processPasswordReset(String email){
         Optional<User> userOptional = userRepository.findByEmail(email);
@@ -51,13 +49,12 @@ public class PasswordForgotService {
 
     }
 
-    public boolean validateToken(String token) {
+    public void validateToken(String token) {
         Optional<ResetToken> tokenReturn =  resetTokenRepositoy.findByToken(token);
         if(tokenReturn.isEmpty() || tokenReturn.get().isExpired()){
             throw new TokenInvalidException();
         }
 
-        return true;
     }
 
     public void resetPassword(String token, String newPassword) {

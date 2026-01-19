@@ -15,7 +15,7 @@ import java.net.http.HttpResponse;
 public class CoreExceptionHandler {
 
 
-    @ExceptionHandler({UsernameNotFoundException.class, TokenInvalidException.class})
+    @ExceptionHandler({UsernameNotFoundException.class})
     public ResponseEntity<ResponseException> handleUserNotFoundException(RuntimeException ex){
         ResponseException response = new ResponseException(HttpStatus.NOT_FOUND.name(),HttpStatus.NOT_FOUND.value(),ex.getMessage());
         return new ResponseEntity<>(
@@ -42,4 +42,15 @@ public class CoreExceptionHandler {
         );
     }
 
+    @ExceptionHandler({TokenInvalidException.class})
+    public ResponseEntity<ResponseException> tokenInvalidException(RuntimeException ex){
+        ResponseException response = new ResponseException(
+                HttpStatus.BAD_REQUEST.name(),
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage());
+        return new ResponseEntity<>(
+                response,
+                HttpStatus.BAD_REQUEST);
+
+    }
 }

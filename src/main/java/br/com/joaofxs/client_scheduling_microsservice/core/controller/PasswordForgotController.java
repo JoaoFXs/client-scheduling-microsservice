@@ -22,13 +22,13 @@ public class PasswordForgotController {
 
         service.processPasswordReset(requestResetDTO.email());
 
-        return ResponseEntity.ok("If the email is registered, you'll get a reset link");
+        return ResponseEntity.ok("Se o e-mail estiver cadastrado, você receberá um link para redefinir a senha");
     }
 
     @GetMapping
     public ResponseEntity<?> validateToken(@RequestParam String token){
         service.validateToken(token);
-        return ResponseEntity.ok("Token is valid");
+        return ResponseEntity.ok("O token é válido");
     }
 
 }

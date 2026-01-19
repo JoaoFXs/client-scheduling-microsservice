@@ -2,6 +2,7 @@ package br.com.joaofxs.client_scheduling_microsservice.core.controller;
 
 
 import br.com.joaofxs.client_scheduling_microsservice.core.dto.RequestResetDTO;
+import br.com.joaofxs.client_scheduling_microsservice.core.dto.ResetPasswordRequestDTO;
 import br.com.joaofxs.client_scheduling_microsservice.core.model.ResetToken;
 import br.com.joaofxs.client_scheduling_microsservice.core.service.PasswordForgotService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,4 +32,9 @@ public class PasswordForgotController {
         return ResponseEntity.ok("O token é válido");
     }
 
+    @PostMapping("/confirm")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequestDTO resetPasswordRequestDTO){
+        service.resetPassword(resetPasswordRequestDTO.token(), resetPasswordRequestDTO.newPassword());
+        return ResponseEntity.ok("Senha redefinida com sucesso");
+    }
 }

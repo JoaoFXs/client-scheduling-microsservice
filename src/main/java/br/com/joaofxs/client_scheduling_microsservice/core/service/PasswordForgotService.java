@@ -8,23 +8,26 @@ import br.com.joaofxs.client_scheduling_microsservice.core.repository.ResetToken
 import br.com.joaofxs.client_scheduling_microsservice.core.repository.UserRepository;
 import br.com.joaofxs.client_scheduling_microsservice.core.utils.GenerateResetToken;
 import br.com.joaofxs.client_scheduling_microsservice.core.utils.NotificationComponent;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class PasswordForgotService {
 
-    @Autowired
-    private UserRepository userRepository;
 
-    @Autowired
-    private GenerateResetToken generateResetToken;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private ResetTokenRepository resetTokenRepositoy;
+    private final GenerateResetToken generateResetToken;
+
+    private final ResetTokenRepository resetTokenRepositoy;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     private NotificationComponent notificationComponent;
@@ -48,12 +51,25 @@ public class PasswordForgotService {
 
     }
 
-    public void validateToken(String token) {
+    public boolean validateToken(String token) {
         Optional<ResetToken> tokenReturn =  resetTokenRepositoy.findByToken(token);
-
         if(tokenReturn.isEmpty() || tokenReturn.get().isExpired()){
             throw new TokenInvalidException();
         }
 
+        return true;
     }
+
+    public void resetPassword(String token, String newPassword) {
+        Optional<ResetToken> tokenReturn =  resetTokenRepositoy.findByToken(token);
+        if(tokenReturn.isEmpty() || tokenReturn.get().isExpired()){
+            throw new TokenInvalidException();
+        }
+        User user = tokenReturn.get().getUser();
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        resetTokenRepositoy.delete(tokenReturn.get());
+    }
+
+
 }

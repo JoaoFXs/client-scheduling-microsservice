@@ -18,7 +18,7 @@ public class NotificationComponent {
     private JavaMailSender mailSender;
 
     public void sendEmail(String email, String token){
-        String resetUrl = hostApp + "/reset-password?token=" + token;
+        String resetUrl = hostApp + "/forgot-password?token=" + token;
         String body = "Click the link below to reset your password.\n" + resetUrl;
 
         SimpleMailMessage message = new SimpleMailMessage();

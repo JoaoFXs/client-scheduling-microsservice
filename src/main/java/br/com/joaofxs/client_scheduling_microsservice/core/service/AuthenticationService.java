@@ -52,11 +52,11 @@ public class AuthenticationService {
     public AccessToken authenticate(AuthRequest request) {
         var user = userRepository.getByEmail(request.email());
         if(user == null){
-            throw new UsernameNotFoundException(request.email() + " não encontrado");
+            throw new UsernameNotFoundException("Usuário ou senha incorretos");
         }
         if(passwordEncoder.matches(request.password(), user.getPassword())){
             return jwtService.generateToken(user);
         }
-        return null;
+        throw new UsernameNotFoundException("Usuário ou senha incorretos");
     }
 }

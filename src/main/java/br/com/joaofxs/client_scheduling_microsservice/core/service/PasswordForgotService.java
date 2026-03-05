@@ -2,8 +2,10 @@ package br.com.joaofxs.client_scheduling_microsservice.core.service;
 
 
 import br.com.joaofxs.client_scheduling_microsservice.core.exception.TokenInvalidException;
+import br.com.joaofxs.client_scheduling_microsservice.core.model.LastPassword;
 import br.com.joaofxs.client_scheduling_microsservice.core.model.ResetToken;
 import br.com.joaofxs.client_scheduling_microsservice.core.model.User;
+import br.com.joaofxs.client_scheduling_microsservice.core.repository.OldPasswordsCleanUpRepository;
 import br.com.joaofxs.client_scheduling_microsservice.core.repository.ResetTokenRepository;
 import br.com.joaofxs.client_scheduling_microsservice.core.repository.UserRepository;
 import br.com.joaofxs.client_scheduling_microsservice.core.utils.GenerateResetToken;
@@ -29,7 +31,7 @@ public class PasswordForgotService {
     private final PasswordEncoder passwordEncoder;
 
     private final NotificationComponent notificationComponent;
-
+    private final OldPasswordsCleanUpRepository passwordsCleanUpRepository;
     public void processPasswordReset(String email){
         Optional<User> userOptional = userRepository.findByEmail(email);
         if(userOptional.isEmpty()) return;
@@ -65,6 +67,14 @@ public class PasswordForgotService {
         User user = tokenReturn.get().getUser();
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
+
+
+        passwordsCleanUpRepository.save(LastPassword
+                .builder()
+                .user(user)
+                .password(passwordEncoder.encode(passwordEncoder.encode(newPassword)))
+                .build());
+
         resetTokenRepositoy.delete(tokenReturn.get());
     }
 

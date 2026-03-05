@@ -3,8 +3,10 @@ package br.com.joaofxs.client_scheduling_microsservice.core.service;
 import br.com.joaofxs.client_scheduling_microsservice.core.dto.AccessToken;
 import br.com.joaofxs.client_scheduling_microsservice.core.dto.UserDTO;
 import br.com.joaofxs.client_scheduling_microsservice.core.exception.UserAlreadyExistException;
+import br.com.joaofxs.client_scheduling_microsservice.core.model.LastPassword;
 import br.com.joaofxs.client_scheduling_microsservice.core.model.User;
 import br.com.joaofxs.client_scheduling_microsservice.core.dto.AuthRequest;
+import br.com.joaofxs.client_scheduling_microsservice.core.repository.OldPasswordsCleanUpRepository;
 import br.com.joaofxs.client_scheduling_microsservice.core.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,6 +23,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final UserRepository userRepository;
+    private final OldPasswordsCleanUpRepository passwordsCleanUpRepository;
 
     public AccessToken register(UserDTO userDTO, String role) {
         User user = User.builder()
@@ -45,6 +48,14 @@ public class AuthenticationService {
         user.setPassword(passwordEncoder.encode(userDTO.password()));
 
         repository.save(user);
+
+        passwordsCleanUpRepository.save(LastPassword
+                .builder()
+                        .user(user)
+                        .password(passwordEncoder.encode(userDTO.password()))
+                        .build());
+        
+
         return jwtService.generateToken(user);
     }
 
@@ -59,4 +70,8 @@ public class AuthenticationService {
         }
         throw new UsernameNotFoundException("Usuário ou senha incorretos");
     }
+
+//    public boolean verifyPasswordUtilization(){
+//
+//    }
 }

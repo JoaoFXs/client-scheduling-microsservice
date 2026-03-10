@@ -33,9 +33,10 @@ public class PasswordForgotController {
         return ResponseEntity.ok("O token é válido");
     }
 
-    @PostMapping("/confirm")
+
+    @PutMapping
     public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequestDTO resetPasswordRequestDTO){
         service.resetPassword(resetPasswordRequestDTO.token(), resetPasswordRequestDTO.newPassword());
-        return ResponseEntity.ok("Senha redefinida com sucesso");
+        return ResponseEntity.ok(new SimpleMessage("Senha redefinida com sucesso"));
     }
 }

@@ -1,6 +1,7 @@
 package br.com.joaofxs.client_scheduling_microsservice.core.service;
 
 
+import br.com.joaofxs.client_scheduling_microsservice.core.exception.PasswordAlreadyUsedException;
 import br.com.joaofxs.client_scheduling_microsservice.core.exception.TokenInvalidException;
 import br.com.joaofxs.client_scheduling_microsservice.core.model.LastPassword;
 import br.com.joaofxs.client_scheduling_microsservice.core.model.ResetToken;
@@ -15,23 +16,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class PasswordForgotService {
 
-
     private final UserRepository userRepository;
-
     private final GenerateResetToken generateResetToken;
-
     private final ResetTokenRepository resetTokenRepositoy;
-
     private final PasswordEncoder passwordEncoder;
-
     private final NotificationComponent notificationComponent;
     private final OldPasswordsCleanUpRepository passwordsCleanUpRepository;
+
     public void processPasswordReset(String email){
         Optional<User> userOptional = userRepository.findByEmail(email);
         if(userOptional.isEmpty()) return;
@@ -64,7 +62,18 @@ public class PasswordForgotService {
         if(tokenReturn.isEmpty() || tokenReturn.get().isExpired()){
             throw new TokenInvalidException();
         }
+
+
         User user = tokenReturn.get().getUser();
+
+        List<LastPassword> lastPasswordList = passwordsCleanUpRepository.findAllByUser(user);
+
+        for (LastPassword lastPassword : lastPasswordList){
+            if(passwordEncoder.matches(newPassword, lastPassword.getPassword())){
+                throw new PasswordAlreadyUsedException();
+            }
+        }
+
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
 

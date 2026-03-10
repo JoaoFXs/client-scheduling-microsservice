@@ -33,7 +33,7 @@ public class CoreExceptionHandler {
         );
     }
 
-    @ExceptionHandler({InvalidTokenException.class, JwtException.class})
+    @ExceptionHandler({InvalidTokenException.class, JwtException.class, PasswordAlreadyUsedException.class})
     public ResponseEntity<?> handleInvalidTokenException(RuntimeException ex){
         ResponseException response = new ResponseException(HttpStatus.CONFLICT.name(),HttpStatus.CONFLICT.value(),ex.getMessage());
         return new ResponseEntity<>(

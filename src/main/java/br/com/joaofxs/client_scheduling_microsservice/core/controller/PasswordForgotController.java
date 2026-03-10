@@ -30,7 +30,7 @@ public class PasswordForgotController {
     @GetMapping
     public ResponseEntity<?> validateToken(@RequestParam String token){
         service.validateToken(token);
-        return ResponseEntity.ok("O token é válido");
+        return ResponseEntity.ok(new SimpleMessage("O token é válido"));
     }
 
 

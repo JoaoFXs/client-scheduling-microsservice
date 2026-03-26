@@ -50,6 +50,8 @@ public class User implements UserDetails {
 
     private LocalDateTime createdAt;
 
+    private String sub;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

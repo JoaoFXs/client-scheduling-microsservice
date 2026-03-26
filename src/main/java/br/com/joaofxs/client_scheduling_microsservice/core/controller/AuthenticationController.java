@@ -4,16 +4,14 @@ package br.com.joaofxs.client_scheduling_microsservice.core.controller;
 import br.com.joaofxs.client_scheduling_microsservice.core.dto.AccessToken;
 import br.com.joaofxs.client_scheduling_microsservice.core.dto.AuthRequest;
 
+import br.com.joaofxs.client_scheduling_microsservice.core.dto.SocialLoginRequest;
 import br.com.joaofxs.client_scheduling_microsservice.core.dto.UserDTO;
 import br.com.joaofxs.client_scheduling_microsservice.core.service.AuthenticationService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 ;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -34,5 +32,10 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<AccessToken> login(@RequestBody AuthRequest request) {
         return ResponseEntity.ok(service.authenticate(request));
+    }
+
+    @PostMapping("/social-login/{request}")
+    public ResponseEntity<AccessToken> validateSocialLogin(@PathVariable String request){
+        return ResponseEntity.ok(service.socialLoginRequest(request));
     }
 }

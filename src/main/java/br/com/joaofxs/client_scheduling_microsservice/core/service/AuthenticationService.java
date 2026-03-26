@@ -95,6 +95,7 @@ public class AuthenticationService {
                         .email(socialLoginRequest.getEmail())
                         .roles(socialLoginRequest.getRole())
                         .sub(socialLoginRequest.getSub())
+                        .provider(socialLoginRequest.getProvider())
                         .build();
 
         userRepository.save(newUser);
@@ -129,6 +130,7 @@ public class AuthenticationService {
                 .name(payload.getName())
                 .email(payload.getEmail())
                 .role(Set.of("USER"))
+                .provider(payload.getProvider())
                 .build();
     }
 

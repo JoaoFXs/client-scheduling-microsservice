@@ -93,8 +93,11 @@ public class JwtService {
 
     public SocialLoginUserDTO decodeBasicJwt(String jwtToken){
         DecodedJWT jwt = JWT.decode(jwtToken);
+        String issuerJwt = jwt.getIssuer();
         try {
-            return objectMapper.readValue(Base64.getUrlDecoder().decode(jwt.getPayload()), SocialLoginUserDTO.class);
+            SocialLoginUserDTO socialLoginUserDTO = objectMapper.readValue(Base64.getUrlDecoder().decode(jwt.getPayload()), SocialLoginUserDTO.class);
+            socialLoginUserDTO.setProvider(issuerJwt);
+            return socialLoginUserDTO;
         } catch (Exception e) {
             throw new RuntimeException("Erro ao converter JSON para Objeto", e);
         }

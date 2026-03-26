@@ -13,6 +13,7 @@ public class SocialLoginUserDTO {
     private String aud;
     private String sub;
     private String email;
+    private String provider;
 
     @JsonProperty("email_verified")
     private boolean emailVerified;

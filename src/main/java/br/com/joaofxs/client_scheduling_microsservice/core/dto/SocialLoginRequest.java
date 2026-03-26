@@ -14,4 +14,5 @@ public class SocialLoginRequest{
     String email;
     String sub;
     Set<String> role;
+    String provider;
 }

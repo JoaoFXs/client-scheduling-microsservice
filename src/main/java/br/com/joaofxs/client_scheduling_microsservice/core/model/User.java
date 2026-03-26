@@ -52,6 +52,8 @@ public class User implements UserDetails {
 
     private String sub;
 
+    private String provider;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

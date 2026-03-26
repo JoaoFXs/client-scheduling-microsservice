@@ -8,6 +8,7 @@ import br.com.joaofxs.client_scheduling_microsservice.core.dto.SocialLoginReques
 import br.com.joaofxs.client_scheduling_microsservice.core.dto.UserDTO;
 import br.com.joaofxs.client_scheduling_microsservice.core.service.AuthenticationService;
 
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 ;
@@ -35,7 +36,14 @@ public class AuthenticationController {
     }
 
     @PostMapping("/social-login/{request}")
-    public ResponseEntity<AccessToken> validateSocialLogin(@PathVariable String request){
+    public ResponseEntity<AccessToken> startSocialLogin(@PathVariable String request){
         return ResponseEntity.ok(service.socialLoginRequest(request));
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<AccessToken> updateUser(@RequestBody AuthRequest request){
+
+        service.updateUser(request);
+        return ResponseEntity.noContent().build();
     }
 }

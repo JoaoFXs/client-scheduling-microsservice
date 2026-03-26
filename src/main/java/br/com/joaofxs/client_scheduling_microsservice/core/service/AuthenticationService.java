@@ -54,7 +54,7 @@ public class AuthenticationService {
         repository.save(user);
 
         passwordsCleanUpRepository.save(LastPassword
-                .builder()
+                        .builder()
                         .user(user)
                         .password(passwordEncoder.encode(userDTO.password()))
                         .build());
@@ -101,6 +101,25 @@ public class AuthenticationService {
         return jwtService.generateToken(newUser);
     }
 
+    public void updateUser(AuthRequest request){
+        var user = userRepository.findByEmail(request.email());
+
+        if(user.isEmpty()){
+            throw new UsernameNotFoundException("Usuário não encontrado");
+        }
+
+       User userToUpdate = user.get();
+
+        userToUpdate.updatePersonalData(
+                request.username(),request.phone(),request.cpf()
+        );
+
+        if (request.password() != null){
+            userToUpdate.changePassword(passwordEncoder.encode(request.password()));
+        }
+
+        userRepository.save(userToUpdate);
+    }
 
     public SocialLoginRequest buildSocialLoginRequest(String jwtToken){
         SocialLoginUserDTO payload = jwtService.decodeBasicJwt(jwtToken);

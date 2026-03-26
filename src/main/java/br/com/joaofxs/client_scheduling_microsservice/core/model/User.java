@@ -84,4 +84,16 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
     }
+
+    // Método que garante a consistência da atualização
+    public void updatePersonalData(String username, String phone, String cpf) {
+        if (username != null && !username.isBlank()) this.username = username;
+        if (phone != null) this.phone = phone;
+        if (cpf != null) this.cpf = cpf;
+    }
+
+    public void changePassword(String encodedPassword) {
+        // Validações de segurança aqui
+        this.password = encodedPassword;
+    }
 }

@@ -1,6 +1,8 @@
 package br.com.joaofxs.client_scheduling_microsservice.core.service;
 
+import br.com.joaofxs.client_scheduling_microsservice.admin.dto.SocialLoginUserDTO;
 import br.com.joaofxs.client_scheduling_microsservice.core.dto.AccessToken;
+import br.com.joaofxs.client_scheduling_microsservice.core.dto.SocialLoginRequest;
 import br.com.joaofxs.client_scheduling_microsservice.core.dto.UserDTO;
 import br.com.joaofxs.client_scheduling_microsservice.core.exception.UserAlreadyExistException;
 import br.com.joaofxs.client_scheduling_microsservice.core.model.LastPassword;
@@ -13,6 +15,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.apache.commons.text.WordUtils;
+
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -50,7 +54,7 @@ public class AuthenticationService {
         repository.save(user);
 
         passwordsCleanUpRepository.save(LastPassword
-                .builder()
+                        .builder()
                         .user(user)
                         .password(passwordEncoder.encode(userDTO.password()))
                         .build());
@@ -62,8 +66,13 @@ public class AuthenticationService {
 
     public AccessToken authenticate(AuthRequest request) {
         var user = userRepository.getByEmail(request.email());
+
         if(user == null){
             throw new UsernameNotFoundException("Usuário ou senha incorretos");
+        }
+
+        if (user.getSub() != null){
+            return jwtService.generateToken(user);
         }
         if(passwordEncoder.matches(request.password(), user.getPassword())){
             return jwtService.generateToken(user);
@@ -71,7 +80,48 @@ public class AuthenticationService {
         throw new UsernameNotFoundException("Usuário ou senha incorretos");
     }
 
-//    public boolean verifyPasswordUtilization(){
-//
-//    }
+    public void socialLoginRequest(String jwtToken, AuthRequest authRequest){
+        SocialLoginRequest socialLoginRequest = buildSocialLoginRequest(jwtToken);
+        var user = userRepository.findBySub(socialLoginRequest.getSub());
+
+        if (user.isPresent()){
+            throw new UserAlreadyExistException("Usuario já cadastrado");
+        }
+        User newUser = User
+                        .builder()
+                        .username(authRequest.username())
+                        .email(socialLoginRequest.getEmail())
+                        .roles(socialLoginRequest.getRole())
+                        .phone(authRequest.phone())
+                        .cpf(authRequest.cpf())
+                        .sub(socialLoginRequest.getSub())
+                        .provider(socialLoginRequest.getProvider())
+                        .password(passwordEncoder.encode(authRequest.password()))
+                        .build();
+
+        userRepository.save(newUser);
+    }
+
+
+
+    public boolean verifyIfUserExist(String jwtToken){
+        SocialLoginRequest socialLoginRequest = buildSocialLoginRequest(jwtToken);
+        var user = userRepository.findBySub(socialLoginRequest.getSub());
+        return user.isPresent();
+    }
+
+
+    public SocialLoginRequest buildSocialLoginRequest(String jwtToken){
+        SocialLoginUserDTO payload = jwtService.decodeBasicJwt(jwtToken);
+
+        return SocialLoginRequest.builder()
+                .sub(payload.getSub())
+                .name(payload.getName())
+                .email(payload.getEmail())
+                .role(Set.of("USER"))
+                .provider(payload.getProvider())
+                .build();
+    }
+
+
 }

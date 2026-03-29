@@ -1,8 +1,12 @@
 package br.com.joaofxs.client_scheduling_microsservice.core.service;
 
+import br.com.joaofxs.client_scheduling_microsservice.admin.dto.SocialLoginUserDTO;
 import br.com.joaofxs.client_scheduling_microsservice.core.dto.AccessToken;
 import br.com.joaofxs.client_scheduling_microsservice.core.exception.InvalidTokenException;
 import br.com.joaofxs.client_scheduling_microsservice.core.model.User;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +25,7 @@ import java.util.Map;
 
 @Service
 public class JwtService {
-
+    private final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
     private SecretKeyGenerator keyGenerator;
 
@@ -84,6 +89,19 @@ public class JwtService {
         } catch (IllegalArgumentException e) {
             throw new InvalidTokenException("Invalid token argument: " + e.getMessage());
         }
+    }
+
+    public SocialLoginUserDTO decodeBasicJwt(String jwtToken){
+        DecodedJWT jwt = JWT.decode(jwtToken);
+        String issuerJwt = jwt.getIssuer();
+        try {
+            SocialLoginUserDTO socialLoginUserDTO = objectMapper.readValue(Base64.getUrlDecoder().decode(jwt.getPayload()), SocialLoginUserDTO.class);
+            socialLoginUserDTO.setProvider(issuerJwt);
+            return socialLoginUserDTO;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao converter JSON para Objeto", e);
+        }
+
     }
 
 

@@ -19,4 +19,5 @@ public class AuthenticationControllerOnlyAdmin {
     public ResponseEntity<AccessToken> registerAdmin(@RequestBody UserDTO request) {
         return new ResponseEntity<>(service.register(request, "admin"), HttpStatus.CREATED);
     }
+
 }

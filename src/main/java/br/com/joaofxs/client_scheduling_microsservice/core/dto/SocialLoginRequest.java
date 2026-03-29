@@ -15,4 +15,6 @@ public class SocialLoginRequest{
     String sub;
     Set<String> role;
     String provider;
+
+
 }

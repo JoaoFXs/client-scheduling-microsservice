@@ -34,16 +34,16 @@ public class AuthenticationController {
     public ResponseEntity<AccessToken> login(@RequestBody AuthRequest request) {
         return ResponseEntity.ok(service.authenticate(request));
     }
-
-    @PostMapping("/social-login/{request}")
-    public ResponseEntity<AccessToken> startSocialLogin(@PathVariable String request){
-        return ResponseEntity.ok(service.socialLoginRequest(request));
+    /** Verifica se usuario social existe **/
+    @GetMapping("/social-login/{jwt}")
+    public boolean verifyIfUserExist(@PathVariable String jwt){
+        return service.verifyIfUserExist(jwt);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<AccessToken> updateUser(@RequestBody AuthRequest request){
-
-        service.updateUser(request);
+    /** Cria um usuario social **/
+    @PostMapping("/social-login/{request}")
+    public ResponseEntity<AccessToken> startSocialLogin(@PathVariable String request, @RequestBody AuthRequest socialLoginRequest){
+        service.socialLoginRequest(request, socialLoginRequest);
         return ResponseEntity.noContent().build();
     }
 }

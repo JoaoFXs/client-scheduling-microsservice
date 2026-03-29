@@ -80,47 +80,36 @@ public class AuthenticationService {
         throw new UsernameNotFoundException("Usuário ou senha incorretos");
     }
 
-    public AccessToken socialLoginRequest(String jwtToken){
-
+    public void socialLoginRequest(String jwtToken, AuthRequest authRequest){
         SocialLoginRequest socialLoginRequest = buildSocialLoginRequest(jwtToken);
         var user = userRepository.findBySub(socialLoginRequest.getSub());
 
-        if(user.isPresent()){
-            return jwtService.generateToken(user.get());
+        if (user.isPresent()){
+            throw new UserAlreadyExistException("Usuario já cadastrado");
         }
-
         User newUser = User
                         .builder()
-                        .username(socialLoginRequest.getName())
+                        .username(authRequest.username())
                         .email(socialLoginRequest.getEmail())
                         .roles(socialLoginRequest.getRole())
+                        .phone(authRequest.phone())
+                        .cpf(authRequest.cpf())
                         .sub(socialLoginRequest.getSub())
                         .provider(socialLoginRequest.getProvider())
+                        .password(passwordEncoder.encode(authRequest.password()))
                         .build();
 
         userRepository.save(newUser);
-        return jwtService.generateToken(newUser);
     }
 
-    public void updateUser(AuthRequest request){
-        var user = userRepository.findByEmail(request.email());
 
-        if(user.isEmpty()){
-            throw new UsernameNotFoundException("Usuário não encontrado");
-        }
 
-       User userToUpdate = user.get();
-
-        userToUpdate.updatePersonalData(
-                request.username(),request.phone(),request.cpf()
-        );
-
-        if (request.password() != null){
-            userToUpdate.changePassword(passwordEncoder.encode(request.password()));
-        }
-
-        userRepository.save(userToUpdate);
+    public boolean verifyIfUserExist(String jwtToken){
+        SocialLoginRequest socialLoginRequest = buildSocialLoginRequest(jwtToken);
+        var user = userRepository.findBySub(socialLoginRequest.getSub());
+        return user.isPresent();
     }
+
 
     public SocialLoginRequest buildSocialLoginRequest(String jwtToken){
         SocialLoginUserDTO payload = jwtService.decodeBasicJwt(jwtToken);

@@ -8,6 +8,7 @@ import br.com.joaofxs.client_scheduling_microsservice.core.exception.UserAlready
 import br.com.joaofxs.client_scheduling_microsservice.core.model.LastPassword;
 import br.com.joaofxs.client_scheduling_microsservice.core.model.User;
 import br.com.joaofxs.client_scheduling_microsservice.core.dto.AuthRequest;
+import br.com.joaofxs.client_scheduling_microsservice.core.model.enums.TypeUser;
 import br.com.joaofxs.client_scheduling_microsservice.core.repository.OldPasswordsCleanUpRepository;
 import br.com.joaofxs.client_scheduling_microsservice.core.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,12 +43,10 @@ public class AuthenticationService {
             throw new UserAlreadyExistException("Email já cadastrado");
         }
 
-        if (role.contains("user")) {
-            user.setRoles(Set.of("USER"));
-        } else {
-            user.setRoles(Set.of("ADMIN"));
-        }
+        Set<TypeUser> roles = determineRoles(role, userDTO.isCompany());
+        user.setRoles(roles);
 
+        System.out.println(user.getAuthorities());
         // Criptografa a senha antes de salvar
         user.setPassword(passwordEncoder.encode(userDTO.password()));
 
@@ -58,7 +57,6 @@ public class AuthenticationService {
                         .user(user)
                         .password(passwordEncoder.encode(userDTO.password()))
                         .build());
-        
 
         return jwtService.generateToken(user);
     }
@@ -104,10 +102,10 @@ public class AuthenticationService {
 
 
 
-    public boolean verifyIfUserExist(String jwtToken){
+    public AccessToken verifyIfUserExist(String jwtToken){
         SocialLoginRequest socialLoginRequest = buildSocialLoginRequest(jwtToken);
         var user = userRepository.findBySub(socialLoginRequest.getSub());
-        return user.isPresent();
+        return jwtService.generateToken(user.get());
     }
 
 
@@ -118,9 +116,20 @@ public class AuthenticationService {
                 .sub(payload.getSub())
                 .name(payload.getName())
                 .email(payload.getEmail())
-                .role(Set.of("USER"))
+                .role(Set.of(TypeUser.USER, TypeUser.CUSTUMER))
                 .provider(payload.getProvider())
                 .build();
+    }
+
+    // --- Método Auxiliar de register ---
+    private Set<TypeUser> determineRoles(String role, boolean isAdmin) {
+        if (!role.contains("user")) {
+            return Set.of(TypeUser.USER, TypeUser.ADMIN);
+        }
+
+        // Usando a lógica ternária para decidir entre ENTERPRISE e CUSTOMER
+        TypeUser specificType = isAdmin ? TypeUser.ENTERPRISE : TypeUser.CUSTUMER;
+        return Set.of(TypeUser.USER, specificType);
     }
 
 

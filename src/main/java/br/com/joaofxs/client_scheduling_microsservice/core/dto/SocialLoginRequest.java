@@ -1,5 +1,6 @@
 package br.com.joaofxs.client_scheduling_microsservice.core.dto;
 
+import br.com.joaofxs.client_scheduling_microsservice.core.model.enums.TypeUser;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +14,7 @@ public class SocialLoginRequest{
     String name;
     String email;
     String sub;
-    Set<String> role;
+    Set<TypeUser> role;
     String provider;
 
 

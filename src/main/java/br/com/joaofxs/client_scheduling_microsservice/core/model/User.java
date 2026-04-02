@@ -1,6 +1,7 @@
 package br.com.joaofxs.client_scheduling_microsservice.core.model;
 
 
+import br.com.joaofxs.client_scheduling_microsservice.core.model.enums.TypeUser;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,13 +47,15 @@ public class User implements UserDetails {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
-    private Set<String> roles;
+    @Enumerated(EnumType.STRING)
+    private Set<TypeUser> roles;
 
     private LocalDateTime createdAt;
 
     private String sub;
 
     private String provider;
+
 
     @PrePersist
     protected void onCreate() {
@@ -64,7 +67,11 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(SimpleGrantedAuthority::new).toList();
+        return roles
+                    .stream()
+                    .map(TypeUser::name)
+                    .map(SimpleGrantedAuthority::new)
+                    .toList();
     }
 
     @Override
@@ -98,4 +105,6 @@ public class User implements UserDetails {
         // Validações de segurança aqui
         this.password = encodedPassword;
     }
+
+
 }

@@ -36,8 +36,8 @@ public class AuthenticationController {
     }
     /** Verifica se usuario social existe **/
     @GetMapping("/social-login/{jwt}")
-    public boolean verifyIfUserExist(@PathVariable String jwt){
-        return service.verifyIfUserExist(jwt);
+    public ResponseEntity<AccessToken> verifyIfUserExist(@PathVariable String jwt){
+        return ResponseEntity.ok(service.verifyIfUserExist(jwt));
     }
 
     /** Cria um usuario social **/

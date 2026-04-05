@@ -1,6 +1,6 @@
 package br.com.joaofxs.client_scheduling_microsservice.core.service;
 
-import br.com.joaofxs.client_scheduling_microsservice.admin.dto.SocialLoginUserDTO;
+import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.model.dto.SocialLoginUserDTO;
 import br.com.joaofxs.client_scheduling_microsservice.core.dto.AccessToken;
 import br.com.joaofxs.client_scheduling_microsservice.core.exception.InvalidTokenException;
 import br.com.joaofxs.client_scheduling_microsservice.core.model.User;

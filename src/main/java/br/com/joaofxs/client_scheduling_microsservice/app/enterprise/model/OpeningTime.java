@@ -1,0 +1,40 @@
+package br.com.joaofxs.client_scheduling_microsservice.app.enterprise.model;
+
+
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "business_opening_time")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class OpeningTime {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "day_of_week", nullable = false)
+    private DayOfWeek dayOfWeek;
+
+    @Column(name = "opening_hours", nullable = false, columnDefinition = "TIME")
+    private LocalDateTime openingHours;
+
+    @Column(name = "closed_hours", nullable = false, columnDefinition = "TIME")
+    private LocalDateTime closedHours;
+
+    @Column
+    private boolean open;
+
+    //Relacionemnto com a Empresa/Profissional
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "business_id")
+    private Business business;
+
+}

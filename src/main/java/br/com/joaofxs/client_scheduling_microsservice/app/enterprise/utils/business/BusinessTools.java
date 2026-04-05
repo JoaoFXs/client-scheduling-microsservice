@@ -1,0 +1,45 @@
+package br.com.joaofxs.client_scheduling_microsservice.app.enterprise.utils.business;
+
+import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.model.dto.BusinessDTO;
+import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.model.Business;
+import org.springframework.stereotype.Component;
+
+@Component
+public class BusinessTools {
+
+    public Business convertDTOtoBusiness(BusinessDTO businessDTO) {
+        return Business.builder()
+                .name(businessDTO.name())
+                .description(businessDTO.description())
+                .phone(businessDTO.phone())
+                .email(businessDTO.email())
+                .website(businessDTO.website())
+                .service(businessDTO.service())
+                .address(businessDTO.address())
+                .number(businessDTO.number())
+                .neighborhood(businessDTO.neighborhood())
+                .state(businessDTO.state())
+                .city(businessDTO.city())
+                .uf(businessDTO.UF())
+                .cep(businessDTO.cep())
+                .build();
+    }
+
+    public BusinessDTO convertBusinessToDTO(Business business){
+        return new BusinessDTO(
+                business.getName(),
+                business.getDescription(),
+                business.getPhone(),
+                business.getEmail(),
+                business.getWebsite(),
+                business.getService(),
+                business.getAddress(),
+                business.getNumber(),
+                business.getNeighborhood(),
+                business.getState(),
+                business.getCity(),
+                business.getUf(),
+                business.getCep()
+        );
+    }
+}

@@ -9,19 +9,37 @@ public class BusinessTools {
 
     public Business convertDTOtoBusiness(BusinessDTO businessDTO) {
         return Business.builder()
-                .cep(businessDTO.cep())
-                .phone(businessDTO.phone())
-                .email(businessDTO.email())
-                .address(businessDTO.address())
                 .name(businessDTO.name())
                 .description(businessDTO.description())
+                .phone(businessDTO.phone())
+                .email(businessDTO.email())
                 .website(businessDTO.website())
                 .service(businessDTO.service())
+                .address(businessDTO.address())
+                .number(businessDTO.number())
+                .neighborhood(businessDTO.neighborhood())
+                .state(businessDTO.state())
+                .city(businessDTO.city())
+                .uf(businessDTO.UF())
+                .cep(businessDTO.cep())
                 .build();
-
     }
 
     public BusinessDTO convertBusinessToDTO(Business business){
-        return new BusinessDTO(business.getName(), business.getDescription(), business.getPhone(), business.getEmail(), business.getService(), business.getWebsite(), business.getAddress(), business.getCep());
+        return new BusinessDTO(
+                business.getName(),
+                business.getDescription(),
+                business.getPhone(),
+                business.getEmail(),
+                business.getWebsite(),
+                business.getService(),
+                business.getAddress(),
+                business.getNumber(),
+                business.getNeighborhood(),
+                business.getState(),
+                business.getCity(),
+                business.getUf(),
+                business.getCep()
+        );
     }
 }

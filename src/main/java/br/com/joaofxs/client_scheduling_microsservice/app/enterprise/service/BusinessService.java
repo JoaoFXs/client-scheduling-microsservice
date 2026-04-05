@@ -3,10 +3,13 @@ package br.com.joaofxs.client_scheduling_microsservice.app.enterprise.service;
 import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.model.dto.BusinessDTO;
 import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.exception.BusinessNotFoundException;
 import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.model.Business;
+import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.model.interfaces.EnterpriseFilterProjection;
 import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.repository.BusinessRepository;
 import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.utils.business.BusinessTools;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,8 +57,8 @@ public class BusinessService {
                 .orElseThrow(() -> new BusinessNotFoundException("Negócio com ID " + id + " não encontrado."));
     }
 
-    public List<String> getAllServices(){
-        return businessRepository.getAllServices();
+    public Page<EnterpriseFilterProjection> getFilters(Pageable pageable){
+        return businessRepository.getFilters(pageable);
     }
     @Transactional
     public void deleteBusinessById(Long id) {

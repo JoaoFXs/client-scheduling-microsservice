@@ -8,6 +8,12 @@ public record BusinessDTO(
          String website,
          String service,
          String address,
-         Long cep
+         String number,
+         String neighborhood,
+         String state,
+         String city,
+         String UF,
+         String cep
 ) {
 }
+

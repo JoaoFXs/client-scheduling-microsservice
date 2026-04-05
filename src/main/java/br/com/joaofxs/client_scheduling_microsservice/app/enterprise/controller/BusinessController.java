@@ -3,10 +3,14 @@ package br.com.joaofxs.client_scheduling_microsservice.app.enterprise.controller
 
 import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.model.dto.BusinessDTO;
 import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.model.Business;
+import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.model.interfaces.EnterpriseFilterProjection;
 import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.service.BusinessService;
 import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.service.OpeningTimeService;
 import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.utils.business.BusinessTools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -64,9 +68,9 @@ public class BusinessController {
 
     }
 
-    @GetMapping("services")
-    private ResponseEntity<?> getAllServicesInDataBase(){
-        List<String> listServices = businessService.getAllServices();
+    @GetMapping("filters")
+    private ResponseEntity<?> getFilters(@PageableDefault(size = 10, page = 0) Pageable pageable){
+        Page<EnterpriseFilterProjection> listServices = businessService.getFilters(pageable);
         return ResponseEntity.ok(listServices);
 
     }

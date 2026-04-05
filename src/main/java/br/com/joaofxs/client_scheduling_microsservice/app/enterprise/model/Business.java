@@ -53,8 +53,18 @@ public class Business {
     private String address;
 
     @NotNull
-    @Size(max = 8)
-    private Long cep;
+    private String number;
+    @NotNull
+    private String neighborhood;
+    @NotNull
+    private String city;
+    @NotNull
+    private String state;
+    @NotNull
+    private String uf;
+
+    @NotNull
+    private String cep;
 
     // cascade = ALL: Se deletar a empresa, deleta os horários junto
     // orphanRemoval = true: Se tirar um horário da lista, deleta do banco

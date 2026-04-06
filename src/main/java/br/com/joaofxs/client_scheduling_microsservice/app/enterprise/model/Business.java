@@ -66,6 +66,9 @@ public class Business {
     @NotNull
     private String cep;
 
+    @NotNull
+    @Column(length = 1000) // Aumenta o limite para 1000 caracteres
+    private String filePublicUrl;
     // cascade = ALL: Se deletar a empresa, deleta os horários junto
     // orphanRemoval = true: Se tirar um horário da lista, deleta do banco
     @OneToMany(mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)

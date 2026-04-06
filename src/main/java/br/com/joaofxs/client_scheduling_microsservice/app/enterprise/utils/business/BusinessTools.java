@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class BusinessTools {
 
-    public Business convertDTOtoBusiness(BusinessDTO businessDTO) {
+    public Business convertDTOtoBusiness(BusinessDTO businessDTO, String filePublicUrl) {
         return Business.builder()
                 .name(businessDTO.name())
                 .description(businessDTO.description())
@@ -22,6 +22,7 @@ public class BusinessTools {
                 .city(businessDTO.city())
                 .uf(businessDTO.UF())
                 .cep(businessDTO.cep())
+                .filePublicUrl(filePublicUrl)
                 .build();
     }
 
@@ -39,7 +40,8 @@ public class BusinessTools {
                 business.getState(),
                 business.getCity(),
                 business.getUf(),
-                business.getCep()
+                business.getCep(),
+                business.getFilePublicUrl()
         );
     }
 }

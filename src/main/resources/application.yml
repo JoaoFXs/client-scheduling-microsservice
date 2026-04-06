@@ -16,8 +16,8 @@ spring:
     mail:
         host: smtp.gmail.com
         port: 587
-        username: javatestesprojects@gmail.com
-        password: jlug uwrg vdvt qumo
+        username: ${GMAIL_EMAIL}
+        password: ${GMAIL_APP_KEY}
         properties:
             mail:
                 smtp:

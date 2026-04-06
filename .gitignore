@@ -37,3 +37,7 @@ application.yml
 application.properties
 application-*.yml
 application-*.properties
+
+### Firebase Credentials ###
+scheduling-944cd-firebase-adminsdk-fbsvc-50a0103506.json
+*.json

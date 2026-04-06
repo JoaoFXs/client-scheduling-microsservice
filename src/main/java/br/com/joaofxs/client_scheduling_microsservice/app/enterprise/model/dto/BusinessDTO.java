@@ -13,7 +13,8 @@ public record BusinessDTO(
          String state,
          String city,
          String UF,
-         String cep
+         String cep,
+         String filePublicUrl
 ) {
 }
 

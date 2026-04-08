@@ -2,6 +2,8 @@ package br.com.joaofxs.client_scheduling_microsservice.app.enterprise.utils.busi
 
 import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.model.dto.BusinessDTO;
 import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.model.Business;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -27,6 +29,7 @@ public class BusinessTools {
     }
 
     public BusinessDTO convertBusinessToDTO(Business business){
+
         return new BusinessDTO(
                 business.getName(),
                 business.getDescription(),
@@ -43,5 +46,9 @@ public class BusinessTools {
                 business.getCep(),
                 business.getFilePublicUrl()
         );
+    }
+
+    public Page<BusinessDTO> convertPageableBusinessToPageDTO(Page<Business> businesses){
+        return businesses.map(this::convertBusinessToDTO);
     }
 }

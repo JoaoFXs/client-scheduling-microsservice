@@ -17,4 +17,5 @@ public interface BusinessRepository extends JpaRepository<Business, Long> {
 
     @Query("SELECT DISTINCT b.service as service, b.neighborhood as neighBorhood, b.city as city, b.state as state, b.cep as cep FROM Business b")
     Page<EnterpriseFilterProjection> getFilters(Pageable pageable);
+
 }

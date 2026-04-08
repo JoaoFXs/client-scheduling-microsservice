@@ -41,15 +41,15 @@ public class BusinessController {
 
 
     @GetMapping
-    private ResponseEntity<?> getAllBusiness(@RequestParam(required = false) String email){
-        List<BusinessDTO> businessDTO;
+    private ResponseEntity<?> getAllBusiness(@PageableDefault(size=10, page=0) Pageable pageable,@RequestParam(required = false) String email){
+        Page<BusinessDTO> businessDTO = null;
 
         if (email != null && !email.isEmpty()) {
             // Se o email foi fornecido, chama a lógica de filtragem
-            businessDTO = businessService.getAllBusinessByEmail(email);
+            //businessDTO = businessService.getAllBusinessByEmail(email);
         } else {
             // Se o email for null (não foi fornecido), chama todos
-            businessDTO = businessService.getAllBusiness();
+            businessDTO = businessService.getAllBusiness(pageable);
         }
 
         return ResponseEntity.ok(businessDTO);

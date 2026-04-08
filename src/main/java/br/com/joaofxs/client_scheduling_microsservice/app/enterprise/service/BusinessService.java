@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -59,10 +60,10 @@ public class BusinessService {
         }
         return fileName.substring(fileName.lastIndexOf("."));
     }
-    public List<BusinessDTO> getAllBusiness() {
+    public Page<BusinessDTO> getAllBusiness(Pageable pageable) {
         log.info("Buscando todos os negócios cadastrados.");
-        List<Business> businesses = businessRepository.findAll();
-        return businesses.stream().map(businessMapper::convertBusinessToDTO).toList();
+        Page<Business> businesses = businessRepository.findAll(pageable);
+        return businessMapper.convertPageableBusinessToPageDTO(businesses);
     }
 
     public List<BusinessDTO> getAllBusinessByEmail(String email){

@@ -51,7 +51,6 @@ public class BusinessController {
             // Se o email for null (não foi fornecido), chama todos
             businessDTO = businessService.getAllBusiness(pageable);
         }
-
         return ResponseEntity.ok(businessDTO);
     }
 

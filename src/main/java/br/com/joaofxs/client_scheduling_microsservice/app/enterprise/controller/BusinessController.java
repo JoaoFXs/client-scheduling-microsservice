@@ -41,7 +41,10 @@ public class BusinessController {
 
 
     @GetMapping
-    private ResponseEntity<?> getAllBusiness(@PageableDefault(size=10, page=0) Pageable pageable,@RequestParam(required = false) String email){
+    private ResponseEntity<?> getAllBusiness(@PageableDefault(size=10, page=0) Pageable pageable,
+                                             @RequestParam(required = false) String email,
+                                             @RequestParam(required = false) String name,
+                                             @RequestParam(required = false) List<String> service){
         Page<BusinessDTO> businessDTO = null;
 
         if (email != null && !email.isEmpty()) {
@@ -49,7 +52,7 @@ public class BusinessController {
             //businessDTO = businessService.getAllBusinessByEmail(email);
         } else {
             // Se o email for null (não foi fornecido), chama todos
-            businessDTO = businessService.getAllBusiness(pageable);
+            businessDTO = businessService.getAllBusiness(pageable, name, service);
         }
         return ResponseEntity.ok(businessDTO);
     }
@@ -76,6 +79,5 @@ public class BusinessController {
         return ResponseEntity.ok(listServices);
 
     }
-
 
 }

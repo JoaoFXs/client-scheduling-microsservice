@@ -6,6 +6,7 @@ import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.model.Busin
 import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.model.interfaces.EnterpriseFilterProjection;
 import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.repository.BusinessRepository;
 import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.utils.business.BusinessTools;
+import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.utils.specs.EnterpriseSpec;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.Bucket;
 import com.google.firebase.cloud.StorageClient;
@@ -60,9 +61,9 @@ public class BusinessService {
         }
         return fileName.substring(fileName.lastIndexOf("."));
     }
-    public Page<BusinessDTO> getAllBusiness(Pageable pageable) {
+    public Page<BusinessDTO> getAllBusiness(Pageable page, String name, List<String> category) {
         log.info("Buscando todos os negócios cadastrados.");
-        Page<Business> businesses = businessRepository.findAll(pageable);
+        Page<Business> businesses = businessRepository.findAll(EnterpriseSpec.filter(name, category), page);
         return businessMapper.convertPageableBusinessToPageDTO(businesses);
     }
 
@@ -95,4 +96,5 @@ public class BusinessService {
         businessRepository.deleteById(id);
         log.info("Negócio com ID {} deletado com sucesso.", id);
     }
+
 }

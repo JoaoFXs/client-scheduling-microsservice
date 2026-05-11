@@ -16,6 +16,7 @@ import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,7 +55,10 @@ public class BusinessServiceImpl implements BusinessService {
     @Override
     public Page<BusinessDTO> getAllBusiness(Pageable page, String name, List<String> category, List<String> uf) {
         log.info("Buscando todos os negócios cadastrados.");
-        Page<Business> businesses = businessRepository.findAll(EnterpriseSpec.filter(name, category, uf), page);
+        Page<Business> businesses = businessRepository.findAll(Specification
+                .where(EnterpriseSpec.hasName(name))
+                .and(EnterpriseSpec.hasServices(category))
+                .and(EnterpriseSpec.hasUf(uf)), page);
         return businessMapper.convertPageableBusinessToPageDTO(businesses);
     }
 

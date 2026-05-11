@@ -6,55 +6,38 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
 import java.util.List;
-
 public class EnterpriseSpec {
-    public static Specification<Business> filter(String name, List<String> services, List<String> uf) {
+
+    // Specifications atômicas
+    public static Specification<Business> hasName(String name) {
+        return (root, query, cb) ->
+                name == null || name.trim().isEmpty() ? null :
+                        cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%");
+    }
+
+    public static Specification<Business> hasServices(List<String> services) {
         return (root, query, cb) -> {
-            System.out.println("Filtrando -> name: " + name + " | services: " + services + " | uf: " + uf);
+            if (services == null || services.isEmpty()) return null;
 
-            List<Predicate> filtrosPrincipais = new ArrayList<>();
+            List<Predicate> predicates = services.stream()
+                    .filter(s -> s != null && !s.trim().isEmpty())
+                    .map(s -> cb.like(cb.lower(root.get("service")), "%" + s.toLowerCase() + "%"))
+                    .toList();
 
-            // 1. Filtro por Nome (AND)
-            if (name != null && !name.trim().isEmpty()) {
-                filtrosPrincipais.add(cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
-            }
+            return predicates.isEmpty() ? null : cb.or(predicates.toArray(new Predicate[0]));
+        };
+    }
 
-            // 2. Filtro por Lista de Serviços (OR entre eles)
-            if (services != null && !services.isEmpty()) {
-                List<Predicate> filtrosServico = new ArrayList<>();
+    public static Specification<Business> hasUf(List<String> ufs) {
+        return (root, query, cb) -> {
+            if (ufs == null || ufs.isEmpty()) return null;
 
-                services.forEach(s -> {
-                    if (s != null && !s.trim().isEmpty()) {
-                        filtrosServico.add(cb.like(cb.lower(root.get("service")), "%" + s.toLowerCase() + "%"));
-                    }
-                });
+            List<Predicate> predicates = ufs.stream()
+                    .filter(s -> s != null && !s.trim().isEmpty())
+                    .map(s -> cb.like(cb.lower(root.get("uf")), "%" + s.toLowerCase() + "%"))
+                    .toList();
 
-                // Se encontrou termos de serviço, agrupa-os com OR
-                if (!filtrosServico.isEmpty()) {
-                    Predicate orServicos = cb.or(filtrosServico.toArray(new Predicate[0]));
-                    filtrosPrincipais.add(orServicos);
-                }
-            }
-
-            // 2. Filtro por Lista de UF (OR entre eles)
-            if (uf != null && !uf.isEmpty()) {
-                List<Predicate> filtrosUf = new ArrayList<>();
-
-                uf.forEach(s -> {
-                    if (s != null && !s.trim().isEmpty()) {
-                        filtrosUf.add(cb.like(cb.lower(root.get("uf")), "%" + s.toLowerCase() + "%"));
-                    }
-                });
-
-                // Se encontrou termos de serviço, agrupa-os com OR
-                if (!filtrosUf.isEmpty()) {
-                    Predicate orUf= cb.or(filtrosUf.toArray(new Predicate[0]));
-                    filtrosPrincipais.add(orUf);
-                }
-            }
-
-            // Junta o Nome com o Bloco de Serviços usando AND
-            return cb.and(filtrosPrincipais.toArray(new Predicate[0]));
+            return predicates.isEmpty() ? null : cb.or(predicates.toArray(new Predicate[0]));
         };
     }
 }

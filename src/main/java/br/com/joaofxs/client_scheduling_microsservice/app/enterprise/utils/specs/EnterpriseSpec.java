@@ -15,26 +15,13 @@ public class EnterpriseSpec {
                         cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%");
     }
 
-    public static Specification<Business> hasServices(List<String> services) {
+    public static Specification<Business> hasValues(List<String> values, String field) {
         return (root, query, cb) -> {
-            if (services == null || services.isEmpty()) return null;
+            if (values == null || values.isEmpty()) return null;
 
-            List<Predicate> predicates = services.stream()
+            List<Predicate> predicates = values.stream()
                     .filter(s -> s != null && !s.trim().isEmpty())
-                    .map(s -> cb.like(cb.lower(root.get("service")), "%" + s.toLowerCase() + "%"))
-                    .toList();
-
-            return predicates.isEmpty() ? null : cb.or(predicates.toArray(new Predicate[0]));
-        };
-    }
-
-    public static Specification<Business> hasUf(List<String> ufs) {
-        return (root, query, cb) -> {
-            if (ufs == null || ufs.isEmpty()) return null;
-
-            List<Predicate> predicates = ufs.stream()
-                    .filter(s -> s != null && !s.trim().isEmpty())
-                    .map(s -> cb.like(cb.lower(root.get("uf")), "%" + s.toLowerCase() + "%"))
+                    .map(s -> cb.like(cb.lower(root.get(field)), "%" + s.toLowerCase() + "%"))
                     .toList();
 
             return predicates.isEmpty() ? null : cb.or(predicates.toArray(new Predicate[0]));

@@ -57,8 +57,8 @@ public class BusinessServiceImpl implements BusinessService {
         log.info("Buscando todos os negócios cadastrados.");
         Page<Business> businesses = businessRepository.findAll(Specification
                 .where(EnterpriseSpec.hasName(name))
-                .and(EnterpriseSpec.hasServices(category))
-                .and(EnterpriseSpec.hasUf(uf)), page);
+                .and(EnterpriseSpec.hasValues(category, "service"))
+                .and(EnterpriseSpec.hasValues(uf, "uf")), page);
         return businessMapper.convertPageableBusinessToPageDTO(businesses);
     }
 

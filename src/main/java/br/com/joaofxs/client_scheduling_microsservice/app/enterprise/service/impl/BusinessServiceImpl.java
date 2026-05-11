@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -51,9 +52,9 @@ public class BusinessServiceImpl implements BusinessService {
     }
 
     @Override
-    public Page<BusinessDTO> getAllBusiness(Pageable page, String name, List<String> category) {
+    public Page<BusinessDTO> getAllBusiness(Pageable page, String name, List<String> category, List<String> uf) {
         log.info("Buscando todos os negócios cadastrados.");
-        Page<Business> businesses = businessRepository.findAll(EnterpriseSpec.filter(name, category), page);
+        Page<Business> businesses = businessRepository.findAll(EnterpriseSpec.filter(name, category, uf), page);
         return businessMapper.convertPageableBusinessToPageDTO(businesses);
     }
 
@@ -76,9 +77,9 @@ public class BusinessServiceImpl implements BusinessService {
     }
 
     @Override
-    public Set<EnterpriseFilterProjection> getFilters(){
+    public Set<EnterpriseFilterProjection> getFilters() {
         return businessRepository.getFilters().stream()
-                .filter(distinctByKey(EnterpriseFilterProjection::getService))
+                .filter(distinctByKey(p -> Arrays.asList(p.getService(), p.getUf())))
                 .collect(Collectors.toSet());
     }
 

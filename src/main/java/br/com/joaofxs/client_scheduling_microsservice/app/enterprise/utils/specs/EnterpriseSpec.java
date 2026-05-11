@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EnterpriseSpec {
-    public static Specification<Business> filter(String name, List<String> services) {
+    public static Specification<Business> filter(String name, List<String> services, List<String> uf) {
         return (root, query, cb) -> {
+            System.out.println("Filtrando -> name: " + name + " | services: " + services + " | uf: " + uf);
+
             List<Predicate> filtrosPrincipais = new ArrayList<>();
 
             // 1. Filtro por Nome (AND)
@@ -31,6 +33,23 @@ public class EnterpriseSpec {
                 if (!filtrosServico.isEmpty()) {
                     Predicate orServicos = cb.or(filtrosServico.toArray(new Predicate[0]));
                     filtrosPrincipais.add(orServicos);
+                }
+            }
+
+            // 2. Filtro por Lista de UF (OR entre eles)
+            if (uf != null && !uf.isEmpty()) {
+                List<Predicate> filtrosUf = new ArrayList<>();
+
+                uf.forEach(s -> {
+                    if (s != null && !s.trim().isEmpty()) {
+                        filtrosUf.add(cb.like(cb.lower(root.get("uf")), "%" + s.toLowerCase() + "%"));
+                    }
+                });
+
+                // Se encontrou termos de serviço, agrupa-os com OR
+                if (!filtrosUf.isEmpty()) {
+                    Predicate orUf= cb.or(filtrosUf.toArray(new Predicate[0]));
+                    filtrosPrincipais.add(orUf);
                 }
             }
 

@@ -45,7 +45,8 @@ public class BusinessController {
     private ResponseEntity<?> getAllBusiness(@PageableDefault(size=10, page=0) Pageable pageable,
                                              @RequestParam(required = false) String email,
                                              @RequestParam(required = false) String name,
-                                             @RequestParam(required = false) List<String> service){
+                                             @RequestParam(required = false) List<String> service,
+                                             @RequestParam(required = false) List<String> uf){
         Page<BusinessDTO> businessDTO = null;
 
         if (email != null && !email.isEmpty()) {
@@ -53,7 +54,7 @@ public class BusinessController {
             //businessDTO = businessService.getAllBusinessByEmail(email);
         } else {
             // Se o email for null (não foi fornecido), chama todos
-            businessDTO = businessService.getAllBusiness(pageable, name, service);
+            businessDTO = businessService.getAllBusiness(pageable, name, service, uf);
         }
         return ResponseEntity.ok(businessDTO);
     }

@@ -14,7 +14,7 @@ public interface BusinessService {
 
     String registerBusiness(BusinessDTO businessDTO, MultipartFile file) throws IOException;
 
-    Page<BusinessDTO> getAllBusiness(Pageable page, String name, List<String> category);
+    Page<BusinessDTO> getAllBusiness(Pageable page, String name, List<String> category, List<String> uf);
 
     List<BusinessDTO> getAllBusinessByEmail(String email);
 

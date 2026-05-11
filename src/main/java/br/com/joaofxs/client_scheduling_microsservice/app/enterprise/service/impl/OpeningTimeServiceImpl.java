@@ -1,4 +1,4 @@
-package br.com.joaofxs.client_scheduling_microsservice.app.enterprise.service;
+package br.com.joaofxs.client_scheduling_microsservice.app.enterprise.service.impl;
 
 
 import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.model.dto.OpeningTimeDTO;
@@ -17,10 +17,10 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor // Usa injeção de dependência via construtor, que é a melhor prática.
-public class OpeningTimeService {
+public class OpeningTimeServiceImpl {
 
     private final OpeningTimeRepository openingTimeRepository;
-    private final BusinessService businessService;
+    private final BusinessServiceImpl businessService;
 
     /**
      * Atualiza os horários de funcionamento de um negócio com base em uma lista de DTOs.

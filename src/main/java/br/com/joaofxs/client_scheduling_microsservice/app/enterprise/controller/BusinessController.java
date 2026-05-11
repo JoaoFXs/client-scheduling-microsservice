@@ -5,7 +5,7 @@ import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.model.dto.B
 import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.model.Business;
 import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.model.interfaces.EnterpriseFilterProjection;
 import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.service.BusinessService;
-import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.service.OpeningTimeService;
+import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.service.impl.OpeningTimeServiceImpl;
 import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.utils.business.BusinessTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/enterprise")
@@ -28,7 +29,7 @@ public class BusinessController {
     private BusinessService businessService;
 
     @Autowired
-    private OpeningTimeService openingTimeService;
+    private OpeningTimeServiceImpl openingTimeService;
 
     @Autowired
     private BusinessTools businessTools;
@@ -74,10 +75,20 @@ public class BusinessController {
     }
 
     @GetMapping("filters")
-    private ResponseEntity<?> getFilters(@PageableDefault(size = 10, page = 0) Pageable pageable){
-        Page<EnterpriseFilterProjection> listServices = businessService.getFilters(pageable);
+    private ResponseEntity<?> getFilters(){
+        Set<EnterpriseFilterProjection> listServices = businessService.getFilters();
         return ResponseEntity.ok(listServices);
 
+    }
+
+    @PatchMapping("{businessId}")
+    private ResponseEntity<?> changeBusiness(@PathVariable Long businessId,
+                                             @RequestPart("request") BusinessDTO business,
+                                             @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
+
+        businessService.changeBusiness(businessId,business, file);
+
+        return ResponseEntity.noContent().build();
     }
 
 }

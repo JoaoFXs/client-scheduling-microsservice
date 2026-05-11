@@ -3,7 +3,7 @@ package br.com.joaofxs.client_scheduling_microsservice.app.enterprise.controller
 
 import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.model.dto.OpeningTimeDTO;
 import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.service.BusinessService;
-import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.service.OpeningTimeService;
+import br.com.joaofxs.client_scheduling_microsservice.app.enterprise.service.impl.OpeningTimeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ public class OpeningTimeController {
     private BusinessService businessService;
 
     @Autowired
-    private OpeningTimeService openingTimeService;
+    private OpeningTimeServiceImpl openingTimeService;
 
 
     @PutMapping("{id}")
